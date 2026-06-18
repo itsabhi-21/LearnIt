@@ -22,9 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${geist.className} antialiased`}>
-        <div className="flex h-screen overflow-hidden">
+        <div className="flex h-screen overflow-hidden bg-[#08080d]">
           <Sidebar />
-          <main className="flex-1 overflow-y-auto p-6 md:p-8 pb-28 md:pb-8">
+          <main className="flex-1 overflow-y-auto p-6 md:p-10 pb-32 md:pb-10">
             <div className="max-w-[1600px] mx-auto">
               {children}
             </div>
