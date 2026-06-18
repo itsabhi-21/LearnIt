@@ -1,65 +1,82 @@
-import Image from "next/image";
+import { Suspense } from 'react'
+import { supabase } from '@/lib/supabase'
+import { Course } from '@/types'
+import HeroTile from '@/components/bento/HeroTile'
+import CourseTile from '@/components/bento/CourseTile'
+import ActivityTile from '@/components/bento/ActivityTile'
+import BentoGrid from '@/components/bento/BentoGrid'
+import SkeletonTile from '@/components/bento/SkeletonTile'
 
-export default function Home() {
+async function Courses() {
+  if (!supabase) {
+    return (
+      <div className="col-span-full text-slate-500 text-sm text-center py-8 px-6 rounded-2xl border border-white/[0.07] bg-gradient-to-br from-[#0f0f1a] via-[#0d0d14] to-[#0a0a0f]">
+        <div className="max-w-md mx-auto space-y-2">
+          <p className="text-slate-400 font-medium">⚠️ Supabase Not Configured</p>
+          <p className="text-slate-600 text-xs">Please check your environment variables and ensure Supabase is properly set up.</p>
+        </div>
+      </div>
+    )
+  }
+
+  const { data, error } = await supabase
+    .from('courses')
+    .select('*')
+    .order('created_at', { ascending: true })
+
+  console.log('Supabase data:', data)
+  console.log('Supabase error:', error)
+
+  if (error) throw new Error(error.message)
+  if (!data || data.length === 0) {
+    return (
+      <div className="col-span-full text-slate-500 text-sm text-center py-8 px-6 rounded-2xl border border-white/[0.07] bg-gradient-to-br from-[#0f0f1a] via-[#0d0d14] to-[#0a0a0f]">
+        <div className="max-w-md mx-auto space-y-2">
+          <p className="text-slate-400 font-medium">📚 No Courses Found</p>
+          <p className="text-slate-600 text-xs">Add some courses to your Supabase table to see them here.</p>
+        </div>
+      </div>
+    )
+  }
+
+  const courses = data as Course[]
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      {courses.map((course, i) => (
+        <CourseTile key={course.id} course={course} index={i} />
+      ))}
+    </>
+  )
+}
+
+export default function DashboardPage() {
+  return (
+    <div className="flex flex-col gap-6 animate-in fade-in duration-700">
+      {/* Row 1: Hero + Activity side by side */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <HeroTile />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="lg:col-span-1">
+          <ActivityTile />
         </div>
-      </main>
+      </div>
+
+      {/* Row 2: Course tiles grid */}
+      <BentoGrid>
+        <Suspense
+          fallback={
+            <>
+              {Array.from({ length: 4 }).map((_, i) => (
+                <SkeletonTile key={i} />
+              ))}
+            </>
+          }
+        >
+          <Courses />
+        </Suspense>
+      </BentoGrid>
     </div>
-  );
+  )
 }
