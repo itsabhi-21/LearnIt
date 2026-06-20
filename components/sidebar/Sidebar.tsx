@@ -6,22 +6,24 @@ import {
   LayoutDashboard,
   BookOpen,
   BarChart2,
-  Award,
-  Users,
   Settings,
-  Sparkles,
   GraduationCap,
 } from 'lucide-react'
 import NavItem from './NavItem'
+import { USER_PROFILE } from '@/lib/user'
 
 const navItems = [
-  { icon: LayoutDashboard, label: 'Dashboard' },
-  { icon: BookOpen, label: 'Courses' },
-  { icon: BarChart2, label: 'Progress' },
-  { icon: Award, label: 'Achievements' },
-  { icon: Users, label: 'Community' },
+  { icon: LayoutDashboard, label: 'Dashboard', targetId: 'dashboard-section' },
+  { icon: BookOpen, label: 'Courses', targetId: 'courses-section' },
+  { icon: BarChart2, label: 'Progress', targetId: 'progress-section' },
   { icon: Settings, label: 'Settings' },
 ]
+
+const sectionToNavMap: Record<string, string> = {
+  'dashboard-section': 'Dashboard',
+  'courses-section': 'Courses',
+  'progress-section': 'Progress',
+}
 
 export default function Sidebar() {
   const [activeItem, setActiveItem] = useState('Dashboard')
@@ -37,6 +39,41 @@ export default function Sidebar() {
     update()
     window.addEventListener('resize', update)
     return () => window.removeEventListener('resize', update)
+  }, [])
+
+  useEffect(() => {
+    const main = document.querySelector('main')
+    if (!main) return
+
+    const sectionIds = ['dashboard-section', 'courses-section', 'progress-section']
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[]
+
+    if (!sections.length) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries.filter((entry) => entry.isIntersecting)
+        if (!visibleEntries.length) return
+
+        const mostVisible = visibleEntries.reduce((prev, current) =>
+          current.intersectionRatio > prev.intersectionRatio ? current : prev
+        )
+
+        const nextActive = sectionToNavMap[mostVisible.target.id]
+        if (nextActive) {
+          setActiveItem(nextActive)
+        }
+      },
+      {
+        root: main,
+        threshold: [0.35, 0.5, 0.75],
+      }
+    )
+
+    sections.forEach((section) => observer.observe(section))
+    return () => observer.disconnect()
   }, [])
 
   return (
@@ -77,34 +114,22 @@ export default function Sidebar() {
             label={item.label}
             isActive={activeItem === item.label}
             onClick={() => setActiveItem(item.label)}
+            targetId={item.targetId}
             collapsed={collapsed}
           />
         ))}
       </div>
 
-      {/* Upgrade Card */}
-      <div className={`mt-4 p-4 rounded-xl bg-linear-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 ${collapsed ? 'hidden' : 'block'}`}>
-        <div className="flex items-start gap-2 mb-3">
-          <Sparkles size={18} className="text-indigo-400" />
-          <div>
-            <p className="text-sm font-semibold text-white mb-1">Upgrade to Pro</p>
-            <p className="text-xs text-slate-400">Unlock advanced features</p>
-          </div>
-        </div>
-        <button className="w-full py-2 rounded-lg bg-linear-to-r from-indigo-600 to-purple-600 text-white text-sm font-semibold hover:from-indigo-500 hover:to-purple-500 transition-all">
-          Get Pro
-        </button>
-      </div>
 
       {/* User Profile */}
       <div className={`mt-4 p-3 rounded-xl bg-[#1a1a2e]/50 border border-white/5 flex items-center gap-3 cursor-pointer hover:bg-[#1a1a2e] transition-colors ${collapsed ? 'justify-center' : ''}`}>
-        <div className="w-10 h-10 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold">AB</div>
+        <div className="w-10 h-10 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold">{USER_PROFILE.initials}</div>
         {!collapsed && (
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-white truncate">Abhinav</p>
+            <p className="text-sm font-semibold text-white truncate">{USER_PROFILE.name}</p>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
-              <p className="text-xs text-slate-500">Premium</p>
+              <p className="text-xs text-slate-500">{USER_PROFILE.subscription}</p>
             </div>
           </div>
         )}

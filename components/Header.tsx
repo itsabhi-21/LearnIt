@@ -2,12 +2,19 @@
 
 import { Search, Bell, Calendar } from 'lucide-react'
 
+const today = new Date()
+const formattedDate = today.toLocaleDateString('en-US', {
+  weekday: 'long',
+  month: 'long',
+  day: 'numeric',
+})
+
 export default function Header() {
   return (
     <header className="flex items-center justify-between">
       <div>
         <h1 className="text-2xl font-bold text-white mb-1">Dashboard</h1>
-        <p className="text-sm text-slate-500">Friday, June 19 · Your daily summary</p>
+        <p className="text-sm text-slate-500">{formattedDate} · Your daily summary</p>
       </div>
       
       <div className="flex items-center gap-4">

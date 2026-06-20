@@ -7,7 +7,7 @@ export default function SkeletonTile() {
     <motion.article 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="relative rounded-2xl p-6 bg-gradient-to-br from-[#0f0f1a] via-[#0d0d14] to-[#0a0a0f] border border-white/[0.07] overflow-hidden"
+      className="relative rounded-2xl p-6 bg-linear-to-br from-[#0f0f1a] via-[#0d0d14] to-[#0a0a0f] border border-white/[0.07] overflow-hidden"
     >
       {/* Shimmer effect */}
       <motion.div
@@ -19,7 +19,7 @@ export default function SkeletonTile() {
           repeat: Infinity,
           ease: 'linear',
         }}
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent"
+        className="absolute inset-0 bg-linear-to-r from-transparent via-white/3 to-transparent"
       />
 
       <div className="relative z-10 flex flex-col gap-5">
@@ -27,18 +27,18 @@ export default function SkeletonTile() {
           <motion.div 
             animate={{ opacity: [0.3, 0.6, 0.3] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            className="w-12 h-12 rounded-xl bg-white/[0.06]" 
+            className="w-12 h-12 rounded-xl bg-white/6" 
           />
           <div className="flex-1 space-y-2">
             <motion.div 
               animate={{ opacity: [0.3, 0.6, 0.3] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              className="h-4 w-32 rounded-md bg-white/[0.06]" 
+              className="h-4 w-32 rounded-md bg-white/6" 
             />
             <motion.div 
               animate={{ opacity: [0.3, 0.6, 0.3] }}
               transition={{ duration: 1.5, delay: 0.1, repeat: Infinity, ease: "easeInOut" }}
-              className="h-3 w-20 rounded-md bg-white/[0.05]" 
+              className="h-3 w-20 rounded-md bg-white/5" 
             />
           </div>
         </div>
@@ -47,18 +47,18 @@ export default function SkeletonTile() {
             <motion.div 
               animate={{ opacity: [0.3, 0.6, 0.3] }}
               transition={{ duration: 1.5, delay: 0.2, repeat: Infinity, ease: "easeInOut" }}
-              className="h-3 w-16 rounded-md bg-white/[0.05]" 
+              className="h-3 w-16 rounded-md bg-white/5" 
             />
             <motion.div 
               animate={{ opacity: [0.3, 0.6, 0.3] }}
               transition={{ duration: 1.5, delay: 0.3, repeat: Infinity, ease: "easeInOut" }}
-              className="h-3 w-10 rounded-md bg-white/[0.06]" 
+              className="h-3 w-10 rounded-md bg-white/6" 
             />
           </div>
           <motion.div 
             animate={{ opacity: [0.3, 0.6, 0.3] }}
             transition={{ duration: 1.5, delay: 0.4, repeat: Infinity, ease: "easeInOut" }}
-            className="h-2 w-full rounded-full bg-white/[0.06]" 
+            className="h-2 w-full rounded-full bg-white/6" 
           />
         </div>
       </div>

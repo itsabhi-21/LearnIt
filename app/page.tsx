@@ -30,7 +30,7 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="h-full flex gap-6">
+    <div id="dashboard-section" className="h-full flex gap-6">
 
       {/* LEFT: Main content */}
       <div className="flex-1 flex flex-col gap-5 min-w-0">
@@ -48,7 +48,7 @@ export default async function DashboardPage() {
         <StatsGrid />
 
         {/* Course tiles */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <section id="courses-section" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           <Suspense
             fallback={
               <>
@@ -62,13 +62,13 @@ export default async function DashboardPage() {
               <CourseTile key={course.id} course={course} index={i} />
             ))}
           </Suspense>
-        </div>
+        </section>
 
         {/* Activity + Up Next */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5 pb-6">
+        <section id="progress-section" className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5 pb-6">
           <ActivityTile />
           <UpNextCard />
-        </div>
+        </section>
 
       </div>
     </div>

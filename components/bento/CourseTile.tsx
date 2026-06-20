@@ -34,12 +34,14 @@ export default function CourseTile({ course, index }: CourseTileProps) {
     <motion.article
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
       whileHover={{ scale: 1.02, y: -2 }}
-      className="relative rounded-2xl p-5 bg-[#1a1a2e]/50 border border-white/[0.05] cursor-pointer hover:border-white/[0.1] transition-all"
+      transition={{ type: 'spring', stiffness: 300, damping: 20, delay: index * 0.05 }}
+      className="relative group rounded-2xl p-5 bg-[#1a1a2e]/50 border border-white/5 cursor-pointer overflow-hidden transition-shadow duration-300 ease-out shadow-sm hover:border-white/[0.14]"
     >
-      {/* Icon + Title */}
-      <div className="flex items-center gap-3 mb-4">
+      <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" />
+      <div className="relative z-10">
+        {/* Icon + Title */}
+        <div className="flex items-center gap-3 mb-4">
         <div className={`w-10 h-10 rounded-xl ${iconBgMap[color]} flex items-center justify-center`}>
           <DynamicIcon name={course.icon_name} size={18} strokeWidth={2.5} />
         </div>
@@ -58,6 +60,7 @@ export default function CourseTile({ course, index }: CourseTileProps) {
           <span className="text-sm font-bold text-white">{course.progress}%</span>
         </div>
         <ProgressBar value={course.progress} color={color} />
+      </div>
       </div>
     </motion.article>
   )

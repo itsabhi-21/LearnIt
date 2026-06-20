@@ -8,6 +8,7 @@ interface NavItemProps {
   label: string
   isActive: boolean
   onClick: () => void
+  targetId?: string
   collapsed?: boolean
 }
 
@@ -16,11 +17,20 @@ export default function NavItem({
   label,
   isActive,
   onClick,
+  targetId,
   collapsed = false,
 }: NavItemProps) {
+  const handleClick = () => {
+    if (targetId) {
+      const target = document.getElementById(targetId)
+      target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+    onClick()
+  }
+
   return (
     <motion.button
-      onClick={onClick}
+      onClick={handleClick}
       title={collapsed ? label : undefined}
       className={`relative flex items-center ${collapsed ? 'justify-center' : 'gap-3'} w-full px-3 py-2.5 rounded-xl cursor-pointer group`}
       whileHover={{ x: 2 }}

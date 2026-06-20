@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Flame, Trophy, Zap } from 'lucide-react'
 import { itemVariants } from './BentoGrid'
+import { USER_PROFILE } from '@/lib/user'
 
 export default function HeroTile({ courseCount = 0 }: { courseCount?: number }) {
   return (
@@ -10,14 +11,14 @@ export default function HeroTile({ courseCount = 0 }: { courseCount?: number }) 
       variants={itemVariants}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-4 h-full p-6 rounded-2xl bg-[#1a1a2e]/50 border border-white/5"
+      whileHover={{ scale: 1.02, y: -2 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className="relative group flex flex-col gap-4 h-full p-6 rounded-2xl bg-[#1a1a2e]/50 border border-white/5 overflow-hidden transition-shadow duration-300 ease-out shadow-sm hover:border-white/10"
     >
-      {/* Top greeting card */}
-      <motion.div
-        whileHover={{ scale: 1.005 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-        className="relative rounded-2xl p-8 overflow-hidden bg-[#0d0d14] border border-white/6"
-      >
+      <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" />
+      <div className="relative z-10">
+        {/* Top greeting card */}
+        <div className="relative rounded-2xl p-8 overflow-hidden bg-[#0d0d14] border border-white/6">
         {/* Glow orbs */}
         <div className="absolute -top-20 -right-20 w-72 h-72 bg-indigo-500/15 rounded-full blur-[80px] pointer-events-none" />
         <div className="absolute -bottom-16 -left-16 w-64 h-64 bg-purple-600/10 rounded-full blur-[70px] pointer-events-none" />
@@ -33,14 +34,14 @@ export default function HeroTile({ courseCount = 0 }: { courseCount?: number }) 
         <div className="relative  z-10">
           {/* Eyebrow */}
           <p className="text-slate-500 text-xs font-medium tracking-widest uppercase mb-3">
-            Good morning 👋
+            Good morning 
           </p>
 
           {/* Heading with colored name */}
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight text-white">
             Welcome back,{' '}
             <span className="text-transparent bg-clip-text bg-linear-to-r from-violet-400 via-pink-400 to-indigo-400">
-              Abhinav
+              {USER_PROFILE.name}
             </span>
           </h1>
 
@@ -64,7 +65,8 @@ export default function HeroTile({ courseCount = 0 }: { courseCount?: number }) 
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
+    </div>
     </motion.article>
   )
 }

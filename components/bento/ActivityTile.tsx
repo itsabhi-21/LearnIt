@@ -24,11 +24,14 @@ export default function ActivityTile() {
     <motion.article
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.3 }}
-      className="rounded-2xl p-6 bg-[#1a1a2e]/50 border border-white/5"
+      whileHover={{ scale: 1.02, y: -2 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.3 }}
+      className="relative group rounded-2xl p-6 bg-[#1a1a2e]/50 border border-white/5 overflow-hidden transition-shadow duration-300 ease-out shadow-sm hover:border-white/10"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" />
+      <div className="relative z-10">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
             <Activity size={16} className="text-purple-400" />
@@ -77,6 +80,7 @@ export default function ActivityTile() {
           ))}
         </div>
         <span className="text-xs text-slate-500">More</span>
+      </div>
       </div>
     </motion.article>
   )
