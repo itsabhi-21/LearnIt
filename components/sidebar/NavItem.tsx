@@ -8,6 +8,7 @@ interface NavItemProps {
   label: string
   isActive: boolean
   onClick: () => void
+  collapsed?: boolean
 }
 
 export default function NavItem({
@@ -15,11 +16,13 @@ export default function NavItem({
   label,
   isActive,
   onClick,
+  collapsed = false,
 }: NavItemProps) {
   return (
     <motion.button
       onClick={onClick}
-      className="relative flex items-center gap-3 w-full px-3 py-2.5 rounded-xl cursor-pointer group"
+      title={collapsed ? label : undefined}
+      className={`relative flex items-center ${collapsed ? 'justify-center' : 'gap-3'} w-full px-3 py-2.5 rounded-xl cursor-pointer group`}
       whileHover={{ x: 2 }}
       whileTap={{ scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 400, damping: 17 }}
@@ -33,21 +36,19 @@ export default function NavItem({
         />
       )}
 
-      <span 
-        className={`relative z-10 transition-colors ${
-          isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-300'
-        }`}
+      <span
+        className={`relative z-10 transition-colors ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-300'}`}
       >
         <Icon size={20} strokeWidth={2} />
       </span>
 
-      <span
-        className={`relative z-10 text-sm font-medium transition-colors ${
-          isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-300'
-        }`}
-      >
-        {label}
-      </span>
+      {!collapsed && (
+        <span
+          className={`relative z-10 text-sm font-medium transition-colors ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-300'}`}
+        >
+          {label}
+        </span>
+      )}
       
       {isActive && label === 'Dashboard' && (
         <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white relative z-10" />

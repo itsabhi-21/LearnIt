@@ -10,34 +10,25 @@ import ActivityTile from '@/components/bento/ActivityTile'
 import SkeletonTile from '@/components/bento/SkeletonTile'
 import HeroTile from '@/components/bento/HeroTile'
 
-async function Courses() {
-  if (!supabase) {
-    return (
-      <div className="col-span-full text-slate-500 text-sm text-center py-8 px-6 rounded-2xl bg-[#1a1a2e]/50 border border-white/[0.05]">
-        <p className="text-slate-400">Supabase not configured</p>
-      </div>
-    )
+export default async function DashboardPage() {
+  let courses: Course[] = []
+
+  try {
+    if (supabase) {
+      const { data, error } = await supabase
+        .from('courses')
+        .select('*')
+        .order('created_at', { ascending: true })
+
+      if (error) throw error
+      courses = (data || []) as Course[]
+    }
+  } catch (err: unknown) {
+    // Let the error boundary handle it
+    const message = err instanceof Error ? err.message : String(err)
+    throw new Error(message || 'Failed to load courses')
   }
 
-  const { data, error } = await supabase
-    .from('courses')
-    .select('*')
-    .order('created_at', { ascending: true })
-
-  if (error) throw new Error(error.message)
-  if (!data || data.length === 0) return null
-
-  const courses = data as Course[]
-  return (
-    <>
-      {courses.map((course, i) => (
-        <CourseTile key={course.id} course={course} index={i} />
-      ))}
-    </>
-  )
-}
-
-export default function DashboardPage() {
   return (
     <div className="h-full flex gap-6">
 
@@ -48,8 +39,8 @@ export default function DashboardPage() {
         <Header />
 
         {/* Hero + Daily Streak side by side */}
-        <div className="grid grid-cols-[1fr_300px] gap-5">
-          <HeroTile />
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5">
+          <HeroTile courseCount={courses.length} />
           <DailyStreakCard />
         </div>
 
@@ -57,7 +48,7 @@ export default function DashboardPage() {
         <StatsGrid />
 
         {/* Course tiles */}
-        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           <Suspense
             fallback={
               <>
@@ -67,12 +58,14 @@ export default function DashboardPage() {
               </>
             }
           >
-            <Courses />
+            {courses.map((course, i) => (
+              <CourseTile key={course.id} course={course} index={i} />
+            ))}
           </Suspense>
         </div>
 
         {/* Activity + Up Next */}
-        <div className="grid grid-cols-[1fr_300px] gap-5 pb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5 pb-6">
           <ActivityTile />
           <UpNextCard />
         </div>

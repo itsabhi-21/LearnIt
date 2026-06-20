@@ -1,12 +1,12 @@
-'use client'
+ 'use client'
 
 import { motion } from 'framer-motion'
 import { Flame, Trophy, Zap } from 'lucide-react'
 import { itemVariants } from './BentoGrid'
 
-export default function HeroTile() {
+export default function HeroTile({ courseCount = 0 }: { courseCount?: number }) {
   return (
-    <motion.div
+    <motion.article
       variants={itemVariants}
       initial="hidden"
       animate="show"
@@ -56,7 +56,7 @@ export default function HeroTile() {
             </div>
             <div className="flex items-center gap-1.5 bg-yellow-500/10 border border-yellow-500/20 rounded-full px-3 py-1">
               <Trophy size={13} className="text-yellow-400" />
-              <span className="text-yellow-300 text-xs font-semibold">4 Courses Active</span>
+              <span className="text-yellow-300 text-xs font-semibold">{courseCount} Courses Active</span>
             </div>
             <div className="flex items-center gap-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full px-3 py-1">
               <Zap size={13} className="text-indigo-400" />
@@ -65,6 +65,6 @@ export default function HeroTile() {
           </div>
         </div>
       </motion.div>
-    </motion.div>
+    </motion.article>
   )
 }

@@ -15,15 +15,20 @@
 - All animation components are Client Components (`'use client'`)
 
 ### Data Fetching
-- Course data fetched server-side via `@supabase/supabase-js`
+- Course data fetched server-side via `@supabase/supabase-js` at the page level and passed down to components (`HeroTile`, `CourseTile`).
 - `<Suspense>` boundary shows skeleton loaders while data loads
-- Graceful error handling if DB connection fails
+- Fetch errors are thrown so `app/error.tsx` can display a friendly error UI
 
 ### Animations
 - Staggered entrance via Framer Motion `variants` + `staggerChildren`
 - Spring physics on all hover states (`stiffness: 300, damping: 20`)
 - Sidebar uses `layoutId` for active item highlight animation
 - Progress bars animate from 0 to value on mount
+
+## Mocked vs Live Data
+- Live from Supabase: `courses` (title, progress, icon_name)
+- Mocked in UI: Streak number, XP, Hours Learned, Up Next content, and Learning Activity graph
+- These mocked values are displayed in the hero and streak card for demo purposes
 
 ## Setup
 

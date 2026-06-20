@@ -20,9 +20,9 @@ export default function MobileNav() {
   const [active, setActive] = useState('Dashboard')
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-[#0d0d14]/95 backdrop-blur-2xl border-t border-white/[0.08] px-2 py-3 shadow-[0_-10px_40px_rgba(0,0,0,0.3)]">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-[#0d0d14]/95 backdrop-blur-2xl border-t border-white/8 px-2 py-3 shadow-[0_-10px_40px_rgba(0,0,0,0.3)]">
       {/* Gradient accent on top */}
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
       
       <div className="flex items-center justify-around max-w-md mx-auto">
         {navItems.map((item) => {
@@ -35,12 +35,12 @@ export default function MobileNav() {
               whileTap={{ scale: 0.9 }}
               whileHover={{ scale: 1.05 }}
               transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-              className="relative flex flex-col items-center gap-1.5 px-4 py-2 min-w-[70px]"
+              className="relative flex flex-col items-center gap-1.5 px-4 py-2 min-w-17.5"
             >
               {isActive && (
                 <motion.div
                   layoutId="mobile-active"
-                  className="absolute inset-0 rounded-2xl bg-gradient-to-br from-indigo-500/25 to-purple-500/20 border border-indigo-400/30"
+                  className="absolute inset-0 rounded-2xl bg-linear-to-br from-indigo-500/25 to-purple-500/20 border border-indigo-400/30"
                   transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                 />
               )}
